@@ -6,6 +6,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RuntimeIdentifiers>win;unix</RuntimeIdentifiers>
     <ExtrasBuildEachRuntimeIdentifier>true</ExtrasBuildEachRuntimeIdentifier>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
