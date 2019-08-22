@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
+    <PackageVersion Condition="'$(PackageVersion)' == ''">2.0.20190814.1</PackageVersion>
     <VersionPrefix Condition="'$(ReleaseTag)' != ''">$(ReleaseTag)</VersionPrefix>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">2.0.0</VersionPrefix>
     <VersionSuffix Condition="'$(CI)' == ''">local</VersionSuffix>
