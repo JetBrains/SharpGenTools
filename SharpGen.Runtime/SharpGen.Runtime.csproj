@@ -12,8 +12,8 @@
     <Content Include="Mapping.xml" PackagePath="build" />
     <Content Include="SharpGen.Runtime.props" PackagePath="build;buildMultiTargeting" />
     <ReferenceAssemblyProjectReference Include="..\refs\SharpGen.Runtime.Refs\SharpGen.Runtime.Refs.csproj" />
-    <PackageReference Include="System.Memory" Version="4.5.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0" />
+    <PackageReference Include="System.Memory" Version="4.5.1" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.1" />
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.0" PrivateAssets="All" /> 
   </ItemGroup>
 </Project>
