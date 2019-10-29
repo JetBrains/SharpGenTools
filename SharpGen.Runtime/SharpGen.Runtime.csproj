@@ -6,6 +6,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <PackageId>JetBrains.SharpGen.Runtime</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
