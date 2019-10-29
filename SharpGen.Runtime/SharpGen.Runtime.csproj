@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <Content Include="Mapping.xml" PackagePath="build" />
-    <Content Include="SharpGen.Runtime.props" PackagePath="build;buildMultiTargeting" />
+    <Content Include="JetBrains.SharpGen.Runtime.props" PackagePath="build;buildMultiTargeting" />
     <ReferenceAssemblyProjectReference Include="..\refs\SharpGen.Runtime.Refs\SharpGen.Runtime.Refs.csproj" />
     <PackageReference Include="System.Memory" Version="4.5.1" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.1" />
