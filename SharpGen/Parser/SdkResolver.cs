@@ -56,28 +56,39 @@ namespace SharpGen.Parser
         
         private string GetVSInstallPath()
         {
-            var query = new SetupConfiguration();
-            var enumInstances = query.EnumInstances();
-
-            int fetched;
-            var instances = new ISetupInstance[1];
-            do
+            try
             {
-                enumInstances.Next(1, instances, out fetched);
-                if (fetched > 0)
+                var query = new SetupConfiguration();
+                var enumInstances = query.EnumInstances();
+
+                int fetched;
+                var instances = new ISetupInstance[1];
+                do
                 {
-                    var instance2 = (ISetupInstance2)instances[0];
-                    var state = instance2.GetState();
-                    if ((state & InstanceState.Registered) == InstanceState.Registered)
+                    enumInstances.Next(1, instances, out fetched);
+                    if (fetched > 0)
                     {
-                        if (instance2.GetPackages().Any(pkg => pkg.GetId() == "Microsoft.VisualStudio.Component.VC.Tools.x86.x64"))
+                        var instance2 = (ISetupInstance2) instances[0];
+                        var state = instance2.GetState();
+                        if ((state & InstanceState.Registered) == InstanceState.Registered)
                         {
-                            return instance2.GetInstallationPath();
+                            if (instance2.GetPackages().Any(pkg =>
+                                pkg.GetId() == "Microsoft.VisualStudio.Component.VC.Tools.x86.x64"))
+                            {
+                                return instance2.GetInstallationPath();
+                            }
                         }
                     }
+                } while (fetched > 0);
+            }
+            catch
+            {
+                var vcToolsDirOverride = Environment.GetEnvironmentVariable("VC_TOOLS_DIR_OVERRIDE");
+                if (!string.IsNullOrEmpty(vcToolsDirOverride))
+                {
+                    return vcToolsDirOverride;
                 }
             }
-            while (fetched > 0);
 
             Logger.Fatal("Unable to find a Visual Studio installation that has the Visual C++ Toolchain installed.");
 
@@ -86,10 +97,20 @@ namespace SharpGen.Parser
 
         private IEnumerable<IncludeDirRule> ResolveWindowsSdk(string version)
         {
-            yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\shared");
-            yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\um");
-            yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\ucrt");
-            yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\winrt");
+            var windowsSdkDirOverride = Environment.GetEnvironmentVariable("WINDOWS_SDK_DIR_OVERRIDE");
+            if (string.IsNullOrEmpty(windowsSdkDirOverride)) {
+                yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\shared");
+                yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\um");
+                yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\ucrt");
+                yield return new IncludeDirRule($@"=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots\KitsRoot10;Include\{version}\winrt");
+            }
+            else
+            {
+                yield return new IncludeDirRule($@"{windowsSdkDirOverride}\Include\{version}\shared");
+                yield return new IncludeDirRule($@"{windowsSdkDirOverride}\Include\{version}\um");
+                yield return new IncludeDirRule($@"{windowsSdkDirOverride}\Include\{version}\ucrt");
+                yield return new IncludeDirRule($@"{windowsSdkDirOverride}\Include\{version}\winrt");
+            }
         }
     }
 }
